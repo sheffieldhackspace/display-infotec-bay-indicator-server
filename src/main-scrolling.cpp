@@ -7,8 +7,8 @@
 #include <CH_AS1100.h>
 
 // top panel
-// #define LOAD_PIN 5 // D1 mini
-#define LOAD_PIN 7 // Arduino
+#define LOAD_PIN 5 // D1 mini
+// #define LOAD_PIN 7 // Arduino
 
 // bottom panel
 // #define LOAD_PIN_2 5
@@ -33,7 +33,7 @@ void setup()
     topRow.begin();
     // bottomRow.begin();
 
-    showText(topRow, (char *)"where is the fucker");
+    showText(topRow, (char *)"this is a text");
     // showText(bottomRow, (char *)"@alifeee");
 }
 
