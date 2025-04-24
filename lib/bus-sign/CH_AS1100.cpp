@@ -170,7 +170,7 @@ void Panel::write16(int d)
 {
   // first 4 bits are don't care so we send zeros
   // caller must call load() if this is the last write16
-  SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE3));
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE3));
   SPI.transfer16(d);
   SPI.endTransaction();
 }
