@@ -13,6 +13,4 @@ Using an ESP, you can get Wi-Fi, but it outputs only 3.3V logic, which you can u
 
 For the 1-8 pin meanings of the ribbon cables, see: <https://github.com/ConnectedHumber/Bus-Terminal-Signs?tab=readme-ov-file#pin-designation>
 
-***!!! THIS LAYOUT IS MISSING A POTENTIOMETER FOR PIN 2 !!!***
-
 ![picture of breadboard layout](images/breadboard.png)
