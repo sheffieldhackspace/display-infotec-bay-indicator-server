@@ -21,6 +21,7 @@ void showText(Panel &p, char *msg) {
 }
 
 void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
   topRow.begin();
   // bottomRow.begin();
 
@@ -29,8 +30,10 @@ void setup() {
 }
 
 void loop() {
+  digitalWrite(LED_BUILTIN, LOW);
   topRow.scrollRows(-1, true); // wrap scroll left to right
   topRow.display();
+  digitalWrite(LED_BUILTIN, HIGH);
   // bottomRow.scrollRows(-1, true); // wrap scroll right to left
   // bottomRow.display();
 }
