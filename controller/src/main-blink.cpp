@@ -14,10 +14,13 @@ void setup() {
   // initialize LED digital pin as an output.
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LOGIC_PIN, OUTPUT);
+
+  Serial.begin(115200);
 }
 
 void loop() {
   // turn the LED OFF
+  Serial.println("HIGH");
   digitalWrite(LED_BUILTIN, HIGH);
   digitalWrite(LOGIC_PIN, HIGH);
 
@@ -25,6 +28,7 @@ void loop() {
   delay(1000);
 
   // turn the LED ON by making the voltage LOW
+  Serial.println("LOW");
   digitalWrite(LED_BUILTIN, LOW);
   digitalWrite(LOGIC_PIN, LOW);
 
