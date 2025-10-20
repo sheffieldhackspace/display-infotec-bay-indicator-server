@@ -17,7 +17,7 @@ char serverName[] = "server.alifeee.net";
 EthernetClient client;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // disable SD SPI
   pinMode(4, OUTPUT);
