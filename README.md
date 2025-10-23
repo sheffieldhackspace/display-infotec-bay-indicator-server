@@ -69,7 +69,7 @@ pio run -e test-ethernet-sign -t upload
 
 ![picture of Arduino proto shield](./images/proto_shield.jpg)
 
-See connection layout in [`layout.ods`](layout.ods):
+See connection layout in [`layout.ods`](layout.ods). POT is a 10k potentiometer.
 
 ![screenshot of spreadsheet software showing circuit layout plans](./images/layout_plan_arduino_proto_shield.png)
 
