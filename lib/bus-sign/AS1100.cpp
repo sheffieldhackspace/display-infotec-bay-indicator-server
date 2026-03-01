@@ -39,7 +39,7 @@ boolean AS1100::begin() {
   setBinaryMode();
   setScan(ROWS_PER_CHIP);
   setIntensity(2, -1); // start low.
-  displayOn(1);
+  sendCmd(0x0C01); // 0x0C01 - display on, 0x0C00 - display off
   display();
   return true;
 }
@@ -156,22 +156,6 @@ void AS1100::sendCmd(int data) {
  */
 void AS1100::setClockMode(int m) {
   sendCmd(0x0E00 + (m & 3));
-}
-
-/**
- * @brief Turns the panel on/off. This needs to be called to see anything.
- * Can be called to flash the display since LED state is not affected
- *
- * state 0 means off, non-zero means on
- *
- * The panel can still be programmed whilst the display is off it just won't appear till you turn the display on again.
- */
-
-void AS1100::displayOn(int state) {
-  if (state != 0)
-    sendCmd(0x0C01);
-  else
-    sendCmd(0x0C00);
 }
 
 /**

@@ -22,8 +22,6 @@ public:
   void setIntensity(int level, int chip); // sets intensity of one or all chips (-1 default)
   void setIndividualIntensity(int chips[]); // provide an array of intensities, one per chip
 
-  void displayOn(int b); // 1=on, 0=off. Entire matrix is turned on/off
-
 private:
   void load();
   void write16(int d);
