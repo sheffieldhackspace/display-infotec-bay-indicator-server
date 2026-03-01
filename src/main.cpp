@@ -12,25 +12,21 @@ Panel bottomRow = Panel(LOAD_PIN_BOTTOM);
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
   topRow.begin();
   bottomRow.begin();
 
   topRow.fillScreen(0);
-
-  for (int i = 0; i < 9; i++) {
-    topRow.drawPixel(0, i, 1);
-  }
+  bottomRow.fillScreen(0);
 
   topRow.setCursor(1, 1);
-  topRow.println("Sheffield Hackspace");
+  topRow.println("LOL ESP32C3");
   topRow.display();
 
-  bottomRow.fillScreen(1);
+  bottomRow.setCursor(1, 1);
+  bottomRow.println("Well that was fast");
   bottomRow.display();
 }
 
 void loop() {
-  topRow.display();
   delay(1000);
 }

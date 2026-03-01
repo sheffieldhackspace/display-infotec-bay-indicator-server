@@ -1,2 +1,2 @@
-#define LOAD_PIN_TOP 5
-#define LOAD_PIN_BOTTOM 7
+#define LOAD_PIN_TOP D4
+#define LOAD_PIN_BOTTOM D6
