@@ -17,8 +17,6 @@
  * alifeee - alifeee.web@outlook.com
  */
 
-// #define SEND_PIXELS_OLD	// for debugging
-
 #include <CH_AS1100.h>
 #include <Arduino.h>
 #include <SPI.h>
@@ -27,7 +25,6 @@
 #define ROWS_PER_CHIP 8 // there are 9 rows but only 8 used
 #define COLS_PER_CHIP 6
 #define LOAD_PULSE_WIDTH 2 // 3 microseconds, duration of MARK
-
 #define NEXT_PULSE_DELAY 1 // 1 microseconds, duration of SPACE following MARK
 
 Panel::Panel(int loadPin) : GFXcanvas1(192, 9), _loadPin(loadPin) {
@@ -74,9 +71,13 @@ void Panel::display() {
     for (int chip = 0; chip < 32; chip++) {
       uint8_t value = 0;
 
+      if (digit > 1) {
+        value |= getPixel(192 - chip * 6 - (digit - 1), 8);
+      }
+
       for (int i = 0; i < 6; i++) {
         value <<= 1;
-        value |= getPixel(192 - chip * 6 - i, 6 - digit);
+        value |= getPixel(192 - chip * 6 - (i + 1), 8 - (digit + 1));
       }
 
       writeDigit(digit, value);

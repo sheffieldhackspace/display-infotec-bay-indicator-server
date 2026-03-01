@@ -17,7 +17,13 @@ void setup() {
   bottomRow.begin();
 
   topRow.fillScreen(0);
-  topRow.println("asdf");
+
+  for (int i = 0; i < 9; i++) {
+    topRow.drawPixel(0, i, 1);
+  }
+
+  topRow.setCursor(1, 1);
+  topRow.println("Sheffield Hackspace");
   topRow.display();
 
   bottomRow.fillScreen(1);
