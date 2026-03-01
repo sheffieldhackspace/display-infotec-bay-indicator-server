@@ -7,10 +7,8 @@
 #include <CH_AS1100.h>
 #include <pins.h>
 
-// panel length
-#define NUM_CHIPS 32
-Panel topRow = Panel(LOAD_PIN_TOP, NUM_CHIPS);
-Panel bottomRow = Panel(LOAD_PIN_BOTTOM, NUM_CHIPS);
+Panel topRow = Panel(LOAD_PIN_TOP);
+Panel bottomRow = Panel(LOAD_PIN_BOTTOM);
 
 void setup() {
   Serial.begin(115200);
@@ -18,7 +16,8 @@ void setup() {
   topRow.begin();
   bottomRow.begin();
 
-  topRow.fillScreen(1);
+  topRow.fillScreen(0);
+  topRow.println("asdf");
   topRow.display();
 
   bottomRow.fillScreen(1);

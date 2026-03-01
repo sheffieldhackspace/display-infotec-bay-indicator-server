@@ -8,15 +8,13 @@
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 
-class Panel : public Adafruit_GFX {
+class Panel : public GFXcanvas1 {
 public:
-  Panel(int LoadPin, int NumChips);
-  ~Panel();
+  Panel(int LoadPin);
 
   bool begin(); // initialises CLK,LOAD,DATA signal states
-  void display(void); // called to send pixels to the display
+  void display(); // called to send pixels to the display
 
-  void drawPixel(int16_t x, int16_t y, uint16_t color) override;
   void setClockMode(int m);
   void displayTest(bool state); // all leds turned on if state is true, off if false
   void setBinaryMode();
@@ -25,7 +23,6 @@ public:
   void setIndividualIntensity(int chips[]); // provide an array of intensities, one per chip
 
   void displayOn(int b); // 1=on, 0=off. Entire matrix is turned on/off
-  uint8_t getPixel(int x, int y);
 
 private:
   void load();
@@ -36,10 +33,4 @@ private:
   int _loadPin = 0;
   int _clkPin = 0;
   int _dataPin = 0;
-
-  // hardware related
-  int _numChips = 0; // assigned in constructor to allow for variable length panels
-  int _numColumns = 0;
-
-  uint8_t *pixels[8]; // each chip has 8 rows and 6 segments
 };

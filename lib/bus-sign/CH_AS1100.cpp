@@ -30,46 +30,13 @@
 
 #define NEXT_PULSE_DELAY 1 // 1 microseconds, duration of SPACE following MARK
 
-/**
- * @brief initialise pins used and allocate array for pixel data
- *
- * The panels consist of a number of AS1100 chips, one per LED sub-panel (normally one character). The full panel has 192 LEDs controlled by 32 AS1100 chips.
- */
-
-Panel::Panel(int loadPin, int numChips) : Adafruit_GFX(numChips * COLS_PER_CHIP, ROWS_PER_CHIP) {
-  _loadPin = loadPin;
-  _numChips = numChips;
-
-  _numColumns = numChips * COLS_PER_CHIP;
-
-  pinMode(loadPin, OUTPUT);
-
-  // load is inverted on the control board
+Panel::Panel(int loadPin) : GFXcanvas1(192, 9), _loadPin(loadPin) {
+  pinMode(_loadPin, OUTPUT);
   digitalWrite(_loadPin, HIGH);
-
-  // addressing of cells is pixels[row][chip]
-  for (int row = 0; row < ROWS_PER_CHIP; row++)
-    pixels[row] = new uint8_t[numChips]; // only bits 0..5 are of interest
 }
 
-/**
- * @brief frees memory used for the pixel array
- */
-Panel::~Panel() {
-  for (int row = 0; row < ROWS_PER_CHIP; row++)
-    delete (pixels[row]);
-}
-
-/**
- * @brief initialises the panel. Clears the display and makes the display visible
- *
- * initializes LOAD signal states. Sets up the panel ready to use.
- */
 boolean Panel::begin() {
   SPI.begin();
-  // initialise pin states etc
-  // some delays needed (why??)
-
   setClockMode(2); // reset the clock to internal
   setClockMode(0);
   setBinaryMode();
@@ -80,11 +47,6 @@ boolean Panel::begin() {
   return true;
 }
 
-/**
- * private function used to generate a load pulse
- *
- * This is send after an SPI signal on CLOCK/DATA to tell the chip to follow the instructions from the pulse.
- */
 void Panel::load() {
   // load pulse causes data to be loaded and displayed if display is on
   digitalWrite(_loadPin, LOW); // transfer from shift register to display drivers buffer
@@ -93,28 +55,12 @@ void Panel::load() {
   delayMicroseconds(NEXT_PULSE_DELAY);
 }
 
-/**
- * private function used to set turn LEDs on/off
- * This will be called once per chip and per row
- *
- * d - pixel data
- * digit - row
- */
 void Panel::writeDigit(int digit, uint8_t d) {
   // d=d & 0xFF;	// mask off trash
   int dd = (digit + 1) << 8;
   write16(0x0000 | dd | d);
 }
 
-/**
- * @brief sends a 16 bit word to the chips
- *
- * the user must call load() when finished.
- *
- * normally there will be one write16() per chip
- * if you only want to address one chip, you can send noop (0x00) a number of times, and then write16 for the chip you want to address
- * (see datasheet section 8.9)
- */
 void Panel::write16(int d) {
   // first 4 bits are don't care so we send zeros
   // caller must call load() if this is the last write16
@@ -123,36 +69,21 @@ void Panel::write16(int d) {
   SPI.endTransaction();
 }
 
-void Panel::drawPixel(int16_t x, int16_t y, uint16_t color) {
-  if ((x > _numColumns) || (x < 0))
-    return;
-  if ((y > 7) || (y < 0))
-    return;
-
-  int chip = x / 6;
-  uint8_t mask = 1 << (x % 6);
-  uint8_t chipBits = pixels[y][chip];
-
-  if (color == 0)
-    pixels[y][chip] = chipBits & ~mask;
-  else
-    pixels[y][chip] = chipBits | mask;
-}
-
 void Panel::display() {
-  int digit, chip;
+  for (int digit = 0; digit < 8; digit++) {
+    for (int chip = 0; chip < 32; chip++) {
+      uint8_t value = 0;
 
-  // moving down the digits (rows) there are 8 digit lines per
-  // chip
+      for (int i = 0; i < 6; i++) {
+        value <<= 1;
+        value |= getPixel(192 - chip * 6 - i, 6 - digit);
+      }
 
-  for (digit = 0; digit < 8; digit++) {
-    // working from the righthand column as that needs to be sent first
-    for (chip = 0; chip < 32; chip++) {
-      //writeDigit(digit, (chip == 31 && digit == 2) ? 127 : 0);
-      writeDigit(digit, pixels[7 - digit][chip]);
+      writeDigit(digit, value);
     }
+
     load();
-  } // digit
+  }
 }
 
 /**
@@ -172,7 +103,7 @@ void Panel::setIntensity(int level, int chipNum = -1) {
     return; // ignore
   if (chipNum == -1) // set all chips
   {
-    for (int c = 0; c < _numChips; c++)
+    for (int c = 0; c < 32; c++)
       write16(0x0A00 + level); // the chip whose brightness needs setting
     load();
     return;
@@ -201,28 +132,9 @@ void Panel::setIntensity(int level, int chipNum = -1) {
 
 void Panel::setIndividualIntensity(int chips[]) {
   // chip[s is an array of intensity values, one per chip
-  for (int i = _numChips - 1; i >= 0; i--)
+  for (int i = 32 - 1; i >= 0; i--)
     write16(0x0A00 + (chips[i] & 15));
   load();
-}
-
-/**
- * @brief returns a pixel state as 1 (on) or 0 (off)
- *
- * col & row are bounds checked. If the col/row is outside the
- * led array zero is returned
- */
-uint8_t Panel::getPixel(int col, int row) {
-  // humans like x,y order
-  // array is in [row][col] order
-  if (col > _numColumns || col < 0)
-    return 0;
-  if (row > (ROWS_PER_CHIP - 1) || row < 0)
-    return 0;
-
-  int chip = col / COLS_PER_CHIP;
-  uint8_t mask = 1 << (col % COLS_PER_CHIP);
-  return (pixels[row][chip] & mask) ? 1 : 0;
 }
 
 /**
@@ -231,7 +143,7 @@ uint8_t Panel::getPixel(int col, int row) {
 void Panel::sendCmd(int data) {
   // workhorse for many register updates below
   // only used when all registers need to contain the same value
-  for (int chip = 0; chip < _numChips; chip++)
+  for (int chip = 0; chip < 32; chip++)
     write16(data);
   load();
 }
