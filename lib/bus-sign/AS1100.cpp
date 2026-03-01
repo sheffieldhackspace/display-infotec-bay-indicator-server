@@ -34,9 +34,10 @@ AS1100::AS1100(int loadPin) : GFXcanvas1(192, 9), _loadPin(loadPin) {
 
 void AS1100::begin() {
   SPI.begin();
+
   sendCmd(0x0E00 + (2 & 3)); // set clock to internal
   sendCmd(0x0E00 + (0 & 3)); // set clock to external
-  setBinaryMode();
+  sendCmd(0x0900); // set binary mode
   setScan(ROWS_PER_CHIP);
   setIntensity(2, -1); // start low.
   sendCmd(0x0C01); // 0x0C01 - display on, 0x0C00 - display off
@@ -144,20 +145,6 @@ void AS1100::sendCmd(int data) {
   for (int chip = 0; chip < 32; chip++)
     write16(data);
   load();
-}
-
-/**
- * This puts the chips in binary mode which allows us to
- * control which leds are on/off using the digit and segment lines
- *
- * This allows us to address each pixel separately.
- *
- * The AS1100 is basically intended for 7 segment displays, but with this we can control a dot-matrix of pixels too.
- *
- * See datasheet section 9.3
- */
-void AS1100::setBinaryMode() {
-  sendCmd(0x0900);
 }
 
 /**
