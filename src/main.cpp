@@ -53,13 +53,13 @@ void setup() {
   widget1.begin();
   widget2.begin();
 
-  widget1.setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+  widget1.setAlign(ALIGN_LEFT | ALIGN_BOTTOM);
   widget1.setInverted(true);
   widget1.setText("SSID: " + WIFI_SSID);
   widget1.render();
   display1.display();
 
-  widget2.setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+  widget2.setAlign(ALIGN_LEFT | ALIGN_BOTTOM);
   widget2.setInverted(true);
   widget2.setText("Connecting...");
   widget2.render();
@@ -75,13 +75,13 @@ void setup() {
 
   server.begin();
 
-  widget1.setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+  widget1.setAlign(ALIGN_LEFT | ALIGN_BOTTOM);
   widget1.setInverted(false);
   widget1.setText("SSID: " + WIFI_SSID + "\n");
   widget1.render();
   display1.display();
 
-  widget2.setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+  widget2.setAlign(ALIGN_LEFT | ALIGN_BOTTOM);
   widget2.setInverted(false);
   widget2.setText(WiFi.localIP().toString() + ":" + SERVER_PORT);
   widget2.render();
@@ -109,7 +109,7 @@ void loop() {
       widget1.setInverted(document["top"]["inverted"] | false);
       widget1.setSpeed(document["top"]["speed"] | 5);
 
-      widget1.setAlign(getAlign(document["top"]["horizontal_align"] | "left") | ALIGN_MIDDLE);
+      widget1.setAlign(getAlign(document["top"]["horizontal_align"] | "left") | ALIGN_BOTTOM);
       widget1.setImage(
         document["top"]["image"] | "",
         document["top"]["image_width"] | 0,
@@ -122,7 +122,7 @@ void loop() {
       widget2.setInverted(document["bottom"]["inverted"] | false);
       widget2.setSpeed(document["bottom"]["speed"] | 5);
 
-      widget2.setAlign(getAlign(document["bottom"]["horizontal_align"] | "left") | ALIGN_MIDDLE);
+      widget2.setAlign(getAlign(document["bottom"]["horizontal_align"] | "left") | ALIGN_BOTTOM);
       widget2.setImage(
         document["bottom"]["image"] | "",
         document["bottom"]["image_width"] | 0,
@@ -141,7 +141,6 @@ void loop() {
 
   widget2.render();
   display2.display();
-  widget2.advanceFrame();
 
   if (millis() - last >= 5000) {
     Serial.printf("Free: %dB, Min free: %dB\n", ESP.getFreeHeap(), ESP.getMinFreeHeap());
