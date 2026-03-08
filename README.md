@@ -69,5 +69,5 @@ $ ./icons/image2bytes.py ./icons/skull.gif
 ### Included libraries
 
 * Adafruit GFX Library - The base for our implementation
-* BayIndicator - Provides an Adafruit GFX compatible driver for the bus sign display; based on the reverse engineering work of [`alifeee`](https://github.com/alifeee/bus-signs) and [`ConnectedHumber`](https://github.com/ConnectedHumber/Bus-Terminal-Signs)
-* DotWidget - Provides a standard way of building a display widget for small IoT screens
+* [Bay Indicator](https://github.com/sheffieldhackspace/display-infotec-bay-indicator) - Provides an Adafruit GFX compatible driver for the bus sign display; based on the reverse engineering work of [`alifeee`](https://github.com/alifeee/bus-signs) and [`ConnectedHumber`](https://github.com/ConnectedHumber/Bus-Terminal-Signs)
+* [Dot Widget](https://github.com/dredzik/dot-widget) - Provides a standard way of building a display widget for small IoT screens
