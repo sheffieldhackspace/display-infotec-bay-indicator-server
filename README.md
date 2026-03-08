@@ -1,6 +1,6 @@
-# Bus Signs
+# display-infotec-bay-indicator-server
 
-The bus signs in the space. Based on code from <https://github.com/ConnectedHumber/Bus-Terminal-Signs>.
+Information server for the Infotec bay indicator display in the hackspace. Based on code from <https://github.com/ConnectedHumber/Bus-Terminal-Signs>.
 
 ## Hardware
 
@@ -17,7 +17,7 @@ The microcontroller is a Seeed Studio XIAO ESP32C3. The display consists of two 
 Flash the server environment to the device:
 
 ```bash
-$ pio run -t clean -t upload -e as1100
+$ pio run -t clean -t upload -e hardware
 ```
 
 ### Setting the status of the display
@@ -69,5 +69,5 @@ $ ./icons/image2bytes.py ./icons/skull.gif
 ### Included libraries
 
 * Adafruit GFX Library - The base for our implementation
-* AS1100 - Provides an Adafruit GFX compatible driver for the bus sign display; based on the reverse engineering work of [`alifeee`](https://github.com/alifeee/bus-signs) and [`ConnectedHumber`](https://github.com/ConnectedHumber/Bus-Terminal-Signs)
+* BayIndicator - Provides an Adafruit GFX compatible driver for the bus sign display; based on the reverse engineering work of [`alifeee`](https://github.com/alifeee/bus-signs) and [`ConnectedHumber`](https://github.com/ConnectedHumber/Bus-Terminal-Signs)
 * DotWidget - Provides a standard way of building a display widget for small IoT screens

@@ -1,7 +1,7 @@
-#include <DotWidget.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <Fonts/Org_01.h>
+#include <BayIndicator.h>
+#include <DotWidget.h>
 #include <WiFi.h>
 
 #include "Credentials.h"
@@ -25,14 +25,8 @@ inline uint8_t getAlign(std::string_view text) {
 unsigned long last = 0;
 WiFiServer server(SERVER_PORT);
 
-#ifdef USE_OLED
-#include <Adafruit_SSD1306.h>
-Adafruit_SSD1306 display(128, 64, &Wire, -1);
-#else
-#include <AS1100.h>
-AS1100 display1 = AS1100(D5, D6, D4);
-AS1100 display2 = AS1100(D8, D7, D9);
-#endif
+BayIndicator display1 = BayIndicator(D5, D6, D4);
+BayIndicator display2 = BayIndicator(D8, D7, D9);
 
 DotWidget widget1(&display1);
 DotWidget widget2(&display2);
@@ -43,12 +37,8 @@ void setup() {
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-#ifdef USE_OLED
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-#else
   display1.begin();
   display2.begin();
-#endif
 
   widget1.begin();
   widget2.begin();
